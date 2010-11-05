@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+
+CFLAGS=
+CXXFLAGS=
+
+TMP=$(CURDIR)/debian/tmp/
+
+%:
+	dh $@
+
+
+override_dh_auto_configure:
+	bash config/autorun.sh
+	dh_auto_configure -- --disable-rpath --enable-static
+
+# upstream does not ship a stable make test, or one suitable for running in
+# a build farm, so we have to skip it. We aren't patching any of the code
+# so any library failures are directly a result of upstream bugs
+override_dh_auto_test:
+	echo "skipping tests"
+
+
+override_dh_auto_install:
+	dh_auto_install
+	# Naming conflict: rename commandline programs
+	for memfile in $(TMP)/usr/bin/mem* $(TMP)/usr/share/man/man1/mem*.1 ; do \
+		mv $$memfile `echo $$memfile | sed 's/\bmem/memc/'` ; \
+	done
+
+override_dh_installchangelogs:
+	dh_installchangelogs ChangeLog
+
+override_dh_strip:
+	dh_strip --dbg-package=libmemcached-dbg
+
+get-orig-source:
+	uscan --verbose --force-download --rename --repack --destdir=..

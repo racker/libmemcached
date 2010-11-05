@@ -1,0 +1,9 @@
+libmemcachedutil.so.1 libmemcachedutil1 #MINVER#
+ libmemcached_util_ping@Base 0.43
+ libmemcached_util_version_check@Base 0.43
+ memcached_pool_behavior_get@Base 0.43
+ memcached_pool_behavior_set@Base 0.43
+ memcached_pool_create@Base 0.43
+ memcached_pool_destroy@Base 0.43
+ memcached_pool_pop@Base 0.43
+ memcached_pool_push@Base 0.43
